@@ -8,35 +8,47 @@ A Docker Compose template for spinning up a local, privacy-first AI workflow env
 
 ## Starting the Stack
 
-Always copy `.env.example` to `.env` before first run. The `.env` file is gitignored and required.
+Run `make install` once to create your `.env` file from the template (skips if `.env` already exists):
 
 ```bash
-cp .env.example .env
+make install
 ```
 
-Then start with the appropriate profile for the host hardware:
+Then start with the target matching your hardware:
 
 ```bash
-# CPU only
-docker compose --profile cpu up
-
-# Nvidia GPU
-docker compose --profile gpu-nvidia up
-
-# AMD GPU (Linux)
-docker compose --profile gpu-amd up
-
-# Mac / Apple Silicon (Ollama in Docker, no GPU passthrough)
-docker compose up
+make up-cpu          # CPU only
+make up-gpu-nvidia   # Nvidia GPU
+make up-gpu-amd      # AMD GPU (Linux / ROCm)
+make up-mac          # Mac / Apple Silicon (Ollama on host)
 ```
+
+Run `make help` (or just `make`) to see all available targets.
 
 ## Upgrading
 
 ```bash
-# Example for CPU profile — swap profile name as needed
-docker compose --profile cpu pull
-docker compose create && docker compose --profile cpu up
+make upgrade-cpu          # CPU only
+make upgrade-gpu-nvidia   # Nvidia GPU
+make upgrade-gpu-amd      # AMD GPU (Linux / ROCm)
+make upgrade-mac          # Mac / Apple Silicon
 ```
+
+Each `upgrade-*` target pulls the latest images then recreates and restarts the stack.
+
+## Makefile Targets
+
+The `Makefile` wraps common Docker Compose commands. All targets are thin wrappers — they add no logic beyond what `docker compose` supports.
+
+| Target group | Targets |
+|---|---|
+| Setup | `install` |
+| Start | `up-cpu`, `up-gpu-nvidia`, `up-gpu-amd`, `up-mac` |
+| Stop | `down-cpu`, `down-gpu-nvidia`, `down-gpu-amd`, `down-mac` |
+| Pull images | `pull-cpu`, `pull-gpu-nvidia`, `pull-gpu-amd`, `pull-mac` |
+| Upgrade | `upgrade-cpu`, `upgrade-gpu-nvidia`, `upgrade-gpu-amd`, `upgrade-mac` |
+
+Run `make help` (or just `make`) for a summary with descriptions. When adding a new Docker Compose profile, add a matching set of four targets (`up-*`, `down-*`, `pull-*`, `upgrade-*`) and update this table.
 
 ## Architecture
 
