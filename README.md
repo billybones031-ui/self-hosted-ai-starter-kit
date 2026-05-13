@@ -42,7 +42,7 @@ Engineering world, handles large amounts of data safely.
 ```bash
 git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
-cp .env.example .env # you should update secrets and passwords inside
+make install # copies .env.example to .env — update secrets and passwords inside
 ```
 
 ### Running n8n using Docker Compose
@@ -52,8 +52,8 @@ cp .env.example .env # you should update secrets and passwords inside
 ```bash
 git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
-cp .env.example .env # you should update secrets and passwords inside
-docker compose --profile gpu-nvidia up
+make install
+make up-gpu-nvidia
 ```
 
 > [!NOTE]
@@ -65,13 +65,13 @@ docker compose --profile gpu-nvidia up
 ```bash
 git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
-cp .env.example .env # you should update secrets and passwords inside
-docker compose --profile gpu-amd up
+make install
+make up-gpu-amd
 ```
 
 #### For Mac / Apple Silicon users
 
-If you’re using a Mac with an M1 or newer processor, you can't expose your GPU
+If you’re using a Mac with an M1 or newer processor, you can’t expose your GPU
 to the Docker instance, unfortunately. There are two options in this case:
 
 1. Run the starter kit fully on CPU, like in the section "For everyone else"
@@ -86,13 +86,13 @@ for installation instructions, and run the starter kit as follows:
 ```bash
 git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
-cp .env.example .env # you should update secrets and passwords inside
-docker compose up
+make install
+make up-mac
 ```
 
 ##### For Mac users running OLLAMA locally
 
-If you're running OLLAMA locally on your Mac (not in Docker), you need to modify the OLLAMA_HOST environment variable
+If you’re running OLLAMA locally on your Mac (not in Docker), you need to modify the OLLAMA_HOST environment variable
 
 1. Set OLLAMA_HOST to `host.docker.internal:11434` in your .env file. 
 2. Additionally, after you see "Editor is now accessible via: <http://localhost:5678/>":
@@ -106,8 +106,8 @@ If you're running OLLAMA locally on your Mac (not in Docker), you need to modify
 ```bash
 git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
-cp .env.example .env # you should update secrets and passwords inside
-docker compose --profile cpu up
+make install
+make up-cpu
 ```
 
 ## ⚡️ Quick start and usage
@@ -145,22 +145,19 @@ language model and Qdrant as your vector store.
 * ### For Nvidia GPU setups:
 
 ```bash
-docker compose --profile gpu-nvidia pull
-docker compose create && docker compose --profile gpu-nvidia up
+make upgrade-gpu-nvidia
 ```
 
 * ### For Mac / Apple Silicon users
 
 ```bash
-docker compose pull
-docker compose create && docker compose up
+make upgrade-mac
 ```
 
 * ### For Non-GPU setups:
 
 ```bash
-docker compose --profile cpu pull
-docker compose create && docker compose --profile cpu up
+make upgrade-cpu
 ```
 
 ## 👓 Recommended reading
