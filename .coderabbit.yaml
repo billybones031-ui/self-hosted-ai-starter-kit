@@ -1,0 +1,30 @@
+language: "en-US"
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  path_filters:
+    - "!assets/**"
+  path_instructions:
+    - path: "docker-compose.yml"
+      instructions: |
+        This is a learning-focused starter kit, not a production deployment.
+        Do not suggest production-grade additions: reverse proxies, SSL/TLS,
+        load balancers, monitoring, backup systems, or advanced security hardening.
+        Focus on correctness of Docker Compose syntax, profile consistency,
+        volume and network configuration, and healthcheck logic.
+    - path: "n8n/demo-data/**"
+      instructions: |
+        These are pre-seeded n8n credential and workflow JSON files imported
+        on first run. Each file must be a single JSON object (not an array)
+        because import uses the --separate flag.
+    - path: "Makefile"
+      instructions: |
+        Makefile targets must use hard tab indentation for recipe lines.
+        All targets should remain thin wrappers around docker compose commands.
+  abort_on_close: true
+chat:
+  auto_reply: true
