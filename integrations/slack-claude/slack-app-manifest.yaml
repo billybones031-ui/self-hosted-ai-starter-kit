@@ -1,0 +1,52 @@
+# Slack app manifest for a dedicated, least-privilege "Claude" bot.
+#
+# WHY: Do not drive Slack automation with a personal Owner/Admin user token.
+# Create a dedicated app with a bot user and only the scopes below, so the
+# credential is revocable, clearly attributed to a bot, and cannot administer
+# your workspace if leaked.
+#
+# HOW: https://api.slack.com/apps  ->  "Create New App"  ->  "From an app
+# manifest"  ->  pick your workspace  ->  paste this YAML  ->  Create  ->
+# "Install to Workspace". Then copy the "Bot User OAuth Token" (xoxb-...) into
+# n8n's Slack credential (or your MCP config) INSTEAD of a user token.
+display_information:
+  name: Claude Assistant
+  description: Claude answers and assists in Slack via a dedicated least-privilege bot.
+  background_color: "#1a1a1a"
+features:
+  bot_user:
+    display_name: claude
+    always_online: true
+  slash_commands:
+    # Optional. Remove this block if you only trigger Claude via @mentions.
+    - command: /claude
+      description: Ask Claude a question
+      usage_hint: "[your question]"
+      should_escape: false
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read   # see @claude mentions
+      - chat:write          # post replies
+      - channels:history    # read messages in public channels it is invited to
+      - groups:history      # read messages in private channels it is invited to
+      - im:history          # read direct messages sent to the bot
+      - im:write            # open a DM to reply
+      - commands            # required only for the /claude slash command
+      - users:read          # resolve user IDs to display names (optional)
+settings:
+  event_subscriptions:
+    # Replace with your public events endpoint. If you use the n8n "Slack
+    # Trigger" node, paste its Production webhook URL here (n8n can also manage
+    # this subscription for you automatically). For a fully local/private
+    # setup, prefer Socket Mode (see settings.socket_mode_enabled) instead of a
+    # public request_url.
+    request_url: https://YOUR-PUBLIC-HOST/webhook/slack-claude
+    bot_events:
+      - app_mention
+      - message.im
+  interactivity:
+    is_enabled: false
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
